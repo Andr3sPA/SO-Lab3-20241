@@ -55,9 +55,6 @@ void *mythread(void *arg) {
 		Y_avgs[j] = Y_avgs[j] / p;
 	}
 	pthread_mutex_unlock(&mutex);
-    printf("Thread %lu: i = %d, it = %d\n", pthread_self(), h, j);
-    printf("Y[5] = %f\n", Y[h-1]);
-    printf("Y_avgs[5] = %f\n", Y_avgs[h-1]);
     return NULL;
 }
 int main(int argc, char* argv[]){
