@@ -74,7 +74,7 @@ void *mythread(void *arg)
 	pthread_mutex_lock(&mutex);
 	printf("\x1B[34mThread %d: (%d - %d), limH = %d, it = %d\n", threadIdx, startH, hh, limH, jj);
 	printf("Y[%d] = %f\n", hh - 1, Y[hh - 1]);
-	printf("Y_avgs[5] = %f\x1B[0m\n", Y_avgs[hh - 1]);
+	printf("Y_avgs[%d] = %f\x1B[0m\n", jj - 1,  Y_avgs[jj - 1]);
 	pthread_mutex_unlock(&mutex);
 
 	return NULL;
@@ -148,13 +148,13 @@ int main(int argc, char *argv[])
 		Y_avgs[i] = 0.0;
 	}
 	a = (double)rand() / RAND_MAX;
-	double YRES[p];
+
+#ifdef DEBUG
+	double *YRES = malloc(sizeof(double) * p);
 	for (i = 0; i < p; i++)
 	{
 		YRES[i] = X[i] * a * max_iters + Y[i];
 	}
-
-#ifdef DEBUG
 	printf("\x1B[34mvector X= [ ");
 	for (i = 0; i < p - 1; i++)
 	{
@@ -170,6 +170,7 @@ int main(int argc, char *argv[])
 	printf("%f ]\n", Y[p - 1]);
 
 	printf("\x1B[31ma= %f \x1B[0m\n", a);
+    free(YRES);
 #endif
 
 	/*
@@ -217,5 +218,8 @@ int main(int argc, char *argv[])
 	printf("Execution time: %f ms \n", exec_time);
 	printf("Last 3 values of Y: %f, %f, %f \n", Y[p - 3], Y[p - 2], Y[p - 1]);
 	printf("Last 3 values of Y_avgs: %f, %f, %f \n", Y_avgs[max_iters - 3], Y_avgs[max_iters - 2], Y_avgs[max_iters - 1]);
+    free(X);
+    free(Y);
+    free(Y_avgs);
 	return 0;
 }
